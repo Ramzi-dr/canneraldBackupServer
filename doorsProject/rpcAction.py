@@ -10,7 +10,12 @@ class RpcAction:
         activateReader_Ouput(readerId=readerId, outputNum=outputNum)
 
     def activate_IO_Output(
-        self, IO_Module, media, readerId, activationModus=None, outputNum=2
+        self,
+        IO_Module,
+        media,
+        readerId,
+        activationModus="open",
+        outputNum=PayloadCollection.IO_ModuleRelay_1,
     ):
         user_label = get_userLabel(
             user_id=get_userIdByMedia_info(publicMediaLabel=media)
@@ -22,6 +27,6 @@ class RpcAction:
 
         if activationModus == "open":
             openOrClose_door(deviceId=IO_Module, outputNum=outputNum)
-            print("door is already open and we will close it ")
+
         else:
             openDoor_short(deviceId=IO_Module, outputNum=outputNum)

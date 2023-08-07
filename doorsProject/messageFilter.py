@@ -2,7 +2,7 @@
 class MessageFilter:
     def __init__(self):
         pass
-
+    
     def messageFilter(self, message):
         data = None
 

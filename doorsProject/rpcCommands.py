@@ -1,5 +1,6 @@
 import requests
 import json
+from doorsProject.inputsState import getInputsState
 from doorsProject.payloadCollection import PayloadCollection
 
 
@@ -68,7 +69,9 @@ def activateReader_Ouput(readerId, outputNum):
         url=PayloadCollection.canneraldRpcServerUrl,
         headers=PayloadCollection.headers,
         verify=True,
-        data=PayloadCollection.activate_output(deviceId=readerId, outputNum=outputNum),
+        data=PayloadCollection.activate_output(
+            deviceId=readerId, outputNum=outputNum, action=1
+        ),
     )
     results = json.loads(response.text)["result"]
 
@@ -79,19 +82,44 @@ def openDoor_short(deviceId, outputNum):
         url=url,
         headers=PayloadCollection.headers,
         verify=True,
-        data=PayloadCollection.activate_output(deviceId=deviceId, outputNum=outputNum),
+        data=PayloadCollection.activate_output(
+            deviceId=deviceId, outputNum=outputNum, action=1
+        ),
     )
     results = json.loads(response.text)["result"]
     print(results)
 
 
 def openOrClose_door(deviceId, outputNum):
+    def relayToggle():
+        # this function is only for relay 1 , u have to change the outputNum to make it flexible
+        action = None
+        if (
+            getInputsState(deviceId=deviceId) == 1
+            or getInputsState(deviceId=deviceId) == 3
+        ):
+            # state 1 = relay1 is active /state 2 = relay2 is active / state 3 = relay1 and 2 are active
+            action = 16
+            openAction = 4
+            closeAction = 16
+        elif (
+            getInputsState(deviceId=deviceId) == 0
+            or getInputsState(deviceId=deviceId) == 2
+        ):
+            action = 4
+        print(action)
+        return action
+
+    relayToggle()
+
     url = PayloadCollection.canneraldRpcServerUrl
     response = requests.get(
         url=url,
         headers=PayloadCollection.headers,
         verify=True,
-        data=PayloadCollection.activate_output(deviceId=deviceId, outputNum=outputNum),
+        data=PayloadCollection.activate_output(
+            deviceId=deviceId,
+            outputNum=outputNum,
+            action=relayToggle(),
+        ),
     )
-    results = json.loads(response.text)["result"]
-    print(results)

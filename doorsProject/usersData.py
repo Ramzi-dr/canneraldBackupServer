@@ -27,6 +27,7 @@ class UsersData:
         response = requests.get(
             url=url, headers=self.headers, verify=True, data=PayloadCollection.code
         )
+
         return json.loads(response.text)["result"]
 
     def getMasterUser(self):
@@ -44,6 +45,7 @@ class UsersData:
 
         # Adding codes to the user_info_dict
         for item in self.codeList:
+            # print(item)
             userId = item["userId"]
             code = item["code"]
             if userId not in user_info_dict:
@@ -88,4 +90,8 @@ class UsersData:
         for user in usersList:
             if len(user["media"]) > 0 and len(user["code"]) > 0:
                 usersData.append(user)
+        print(usersData)
         return usersData
+
+
+# user = UsersData().getUserData

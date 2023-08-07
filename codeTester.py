@@ -3,7 +3,7 @@ import websockets
 import uuid
 import json
 import websocket
-from doorsProject.emaiManager import *
+from doorsProject.emailManager import *
 from doorsProject.payloadCollection import PayloadCollection
 
 

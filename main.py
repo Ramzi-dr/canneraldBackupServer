@@ -2,7 +2,7 @@ import asyncio
 import websockets
 import uuid
 import json
-from doorsProject.emaiManager import *
+from doorsProject.emailManager import *
 from doorsProject.payloadCollection import PayloadCollection
 
 from doorsProject.glutzMain import *

@@ -1,6 +1,5 @@
 import json
 import os
-import time
 
 
 class PayloadCollection:
@@ -8,27 +7,22 @@ class PayloadCollection:
     password = os.environ.get("GLUTZ_BST_PASS")
     headers = {"Content-Type": "application/json"}
     GlutzUrl = "31.24.10.138"
-    eventWsServerPort = 8750
-    eventWsServerIp = "localhost"
-    eventWsServerUrl = f"ws://{eventWsServerIp}:{eventWsServerPort}"
-    localWsServerPort = 8800
-    localWsServerIp = "localhost"
-    localWsServerIp = f"ws://{localWsServerIp}:{localWsServerPort}"
+    localWsServerPort = 8750
+    localWsServerUrl = f"ws://localhost:{localWsServerPort}"
     canneraldRpcServerUrl = f"http://{username}:{password}@{GlutzUrl}:8332/rpc/"
     canneraldWsServerUrl = f"ws://{username}:{password}@{GlutzUrl}:8332"
-    # lagerHausServerGlutzUrl = 'lagerhausweg-10.onlinezuko.ch'
-    # canneraldGlutzUrl = 'werk-fraubrunnen.onlinezuko.ch'
-    # canneraldRpcServerUrl = (
-    #    f"https://{username}:{password}@werk-fraubrunnen.onlinezuko.ch/rpc/"
-    # )
-    # lagerHausRpcServerUrl = (
-    #   f"https://{username}:{password}@lagerhausweg-10.onlinezuko.ch/rpc/"
-    # )
-    towFactorAuthenticationId = "5022"
+    backupWsServerPort = 8800
+    backupWsServerIp = "localhost"
+    backupWsServerUrl = f"ws://{backupWsServerIp}:{backupWsServerPort}"
+    towFactorAuthenticationId = "5022"  # in Glutz door Properties
     IO_Module_Type = 103
     E_Reader_IP55_Type = 102
     E_Reader_Type = 101
     IO_Extender_Type = 80
+    IO_ModuleRelay_1 = 2
+    IO_ModuleRelay_2 = 4
+
+    masterCodeActionProfileId = 1002  # in Glutz Codes menu profile non Default
     message = {
         "method": "registerObserver",
         "params": [
@@ -80,7 +74,7 @@ class PayloadCollection:
     )
 
     @staticmethod
-    def activate_output(deviceId, outputNum):
+    def activate_output(deviceId, outputNum, action):
         payload = json.dumps(
             {
                 "method": "eAccess.deviceOperation",
@@ -88,7 +82,7 @@ class PayloadCollection:
                     "OpenDoor",
                     {
                         "deviceid": deviceId,
-                        "action": 1,
+                        "action": action,
                         "outputs": outputNum,
                         "hasMotor": "false",
                     },
@@ -217,13 +211,3 @@ class PayloadCollection:
             }
         )
         return payload
-
-    def count_seconds(duration):
-        start_time = time.time()
-        elapsed_time = 0
-
-        while elapsed_time < duration:
-            elapsed_time = time.time() - start_time
-            time.sleep(1)  # Wait for 1 second
-        print(int(elapsed_time))
-        return elapsed_time

@@ -3,7 +3,7 @@ import websockets.exceptions
 from websockets import connect
 from doorsProject.observer import Observer
 from doorsProject.payloadCollection import *
-from doorsProject.emaiManager import *
+from doorsProject.emailManager import *
 import threading
 from doorsProject.accessManager import AccessManager
 from doorsProject.messageFilter import MessageFilter
