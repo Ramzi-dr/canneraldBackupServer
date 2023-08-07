@@ -72,22 +72,22 @@ async def listen(url, serverInfo):
 
                     while take_over:
                         message = json.loads(await websocket.recv())
-                        print(message)
-                        message_filter = MessageFilter()
-                        data = message_filter.messageFilter(message=message)
-                        door = message_filter.get_door_id(message=message)
+                        if take_over == True:
+                            print(message)
+                            message_filter = MessageFilter()
+                            data = message_filter.messageFilter(message=message)
+                            door = message_filter.get_door_id(message=message)
 
-                        if door is not None:
-                            if door not in doors_instances:
-                                # Start a new thread or process to handle the new door_id
-                                asyncio.create_task(handle_door(door, data))
-                            else:
-                                observer = doors_instances.get(
-                                    (threading.current_thread().ident, door)
-                                )
-                                await observer.observer(data)
+                            if door is not None:
+                                if door not in doors_instances:
+                                    # Start a new thread or process to handle the new door_id
+                                    asyncio.create_task(handle_door(door, data))
+                                else:
+                                    observer = doors_instances.get(
+                                        (threading.current_thread().ident, door)
+                                    )
+                                    await observer.observer(data)
                         # ... Continue processing existing door_ids ...
-
             except ConnectionRefusedError:
                 print(
                     f"Hoi We don't have a connection. Please control the {serverInfo} Server."
