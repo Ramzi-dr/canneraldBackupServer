@@ -106,7 +106,7 @@ class WebSocketServer:
         server = await websockets.serve(
             self.handle_client,
             "localhost",
-            PayloadCollection.localWsServerPort,
+            PayloadCollection.backupWsServerPort,
             ping_timeout=None,
         )
         print("Server running...")

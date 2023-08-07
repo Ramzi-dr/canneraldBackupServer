@@ -7,8 +7,8 @@ class PayloadCollection:
     password = os.environ.get("GLUTZ_BST_PASS")
     headers = {"Content-Type": "application/json"}
     GlutzUrl = "31.24.10.138"
-    localWsServerPort = 8750
-    localWsServerUrl = f"ws://localhost:{localWsServerPort}"
+    # localWsServerPort = 8750
+    # localWsServerUrl = f"ws://localhost:{localWsServerPort}"
     canneraldRpcServerUrl = f"http://{username}:{password}@{GlutzUrl}:8332/rpc/"
     canneraldWsServerUrl = f"ws://{username}:{password}@{GlutzUrl}:8332"
     backupWsServerPort = 8800
