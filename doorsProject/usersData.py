@@ -1,6 +1,6 @@
 import json
 import requests
-from doorsProject.payloadCollection import PayloadCollection
+from payloadCollection import PayloadCollection
 
 
 class UsersData:
@@ -27,7 +27,7 @@ class UsersData:
         response = requests.get(
             url=url, headers=self.headers, verify=True, data=PayloadCollection.code
         )
-
+        print(json.loads(response.text)["result"])
         return json.loads(response.text)["result"]
 
     def getMasterUser(self):
@@ -90,8 +90,8 @@ class UsersData:
         for user in usersList:
             if len(user["media"]) > 0 and len(user["code"]) > 0:
                 usersData.append(user)
-        print(usersData)
+
         return usersData
 
 
-# user = UsersData().getUserData
+user = UsersData().getUserCode

@@ -21,6 +21,7 @@ class PayloadCollection:
     IO_Extender_Type = 80
     IO_ModuleRelay_1 = 2
     IO_ModuleRelay_2 = 4
+    masterCodeActionProfileId = 1002
 
     masterCodeActionProfileId = 1002  # in Glutz Codes menu profile non Default
     message = {
