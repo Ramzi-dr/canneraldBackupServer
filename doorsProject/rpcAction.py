@@ -14,7 +14,7 @@ class RpcAction:
         IO_Module,
         media,
         readerId,
-        activationModus="open",
+        activationModus=None,
         outputNum=PayloadCollection.IO_ModuleRelay_1,
     ):
         user_label = get_userLabel(

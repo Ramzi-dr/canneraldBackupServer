@@ -27,7 +27,6 @@ class UsersData:
         response = requests.get(
             url=url, headers=self.headers, verify=True, data=PayloadCollection.code
         )
-        print(json.loads(response.text)["result"])
         return json.loads(response.text)["result"]
 
     def getMasterUser(self):
@@ -37,6 +36,7 @@ class UsersData:
             verify=True,
             data=PayloadCollection.master,
         )
+
         return json.loads(response.text)["result"]
 
     def getUserData(self):
@@ -45,7 +45,6 @@ class UsersData:
 
         # Adding codes to the user_info_dict
         for item in self.codeList:
-            # print(item)
             userId = item["userId"]
             code = item["code"]
             if userId not in user_info_dict:
@@ -53,9 +52,12 @@ class UsersData:
                     "userId": userId,
                     "media": [],
                     "code": [],
-                    "Master": False,
+                    "MasterCode": [],
                 }
-            user_info_dict[userId]["code"].append(code)
+            if item["actionProfileId"] != PayloadCollection.masterCodeActionProfileId:
+                user_info_dict[userId]["code"].append(code)
+            if item["actionProfileId"] == PayloadCollection.masterCodeActionProfileId:
+                user_info_dict[userId]["MasterCode"].append(code)
 
         # Adding media to the user_info_dict
         for item in self.mediaList:
@@ -66,22 +68,23 @@ class UsersData:
                     "userId": userId,
                     "media": [],
                     "code": [],
-                    "Master": False,
+                    "MasterCode": False,
                 }
             user_info_dict[userId]["media"].append(media)
 
-        # Adding Master to the user_info_dict
-        for item in self.masterUserList:
-            userId = item["baseId"]
-            Master = item["value"]
-            if userId not in user_info_dict:
-                user_info_dict[userId] = {
-                    "userId": userId,
-                    "media": [],
-                    "code": [],
-                    "Master": Master,
-                }
-            user_info_dict[userId]["Master"] = Master
+        # # Adding Master to the user_info_dict
+        # for item in self.codeList:
+        #     # print(item)
+        #     userId = item["userId"]
+        #     Master = item["actionProfileId"]
+        #     if userId not in user_info_dict:
+        #         user_info_dict[userId] = {
+        #             "userId": userId,
+        #             "media": [],
+        #             "code": [],
+        #             "Master": Master,
+        #         }
+        #     user_info_dict[userId]["Master"] = Master
 
         # Converting the user_info_dict values to a list
 
@@ -90,8 +93,8 @@ class UsersData:
         for user in usersList:
             if len(user["media"]) > 0 and len(user["code"]) > 0:
                 usersData.append(user)
-
+        print(usersData)
         return usersData
 
 
-user = UsersData().getUserCode
+user = UsersData().getUserData
