@@ -1,6 +1,6 @@
 import json
 import requests
-from payloadCollection import PayloadCollection
+from doorsProject.payloadCollection import PayloadCollection
 
 
 class UsersData:

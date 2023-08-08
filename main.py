@@ -34,9 +34,9 @@ class WebSocketServer:
                 message_str = await websocket.recv()
                 message = json.loads(message_str)
                 print(f"Received message from client {client_id}: {message}")
-                await self.broadcast(
-                    message, sender_id=client_id
-                )  # Broadcast message to all clients
+                # await self.broadcast(
+                #     message, sender_id=client_id
+            #  )  # Broadcast message to all clients
         except websockets.ConnectionClosed:
             del self.connected_clients[client_id]
             # Remove the client when disconnected
@@ -60,8 +60,8 @@ class WebSocketServer:
         except websockets.ConnectionClosedOK:
             print("closed is ok")
 
-        except websocket.WebSocketConnectionClosedException:
-            print("WebSocket connection closed.")
+        except Exception as e:
+            print(e)
         except (websockets.ConnectionClosed, websockets.ConnectionClosedError):
             take_overToggle(True)
             await run_GlutzListener()
@@ -133,11 +133,12 @@ class WebSocketServer:
         await server.wait_closed()
 
 
-if __name__ == "__main__":
+async def main():
     try:
         server = WebSocketServer()
-        asyncio.get_event_loop().run_until_complete(server.start_server())
-        asyncio.get_event_loop().run_forever()
+        await server.start_server()
+        loop = asyncio.get_event_loop()
+        loop.run_forever()
     except KeyboardInterrupt:
         print("Server shutting down...")
     except Exception as e:
@@ -150,3 +151,7 @@ if __name__ == "__main__":
         # except Exception as e:
         #     print(e)
         #     pass
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
