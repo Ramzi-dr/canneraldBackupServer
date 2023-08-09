@@ -26,16 +26,16 @@ def sendGmail_svenVersion(*args, subject):
     )
 
 
-def sendGmail_ramziVersion(*args, subject):
+def sendGmail_ramziVersion(*args, subject, text_1="", text_2=""):
     gmail.send(
         subject=subject,
         receivers=["ramzi.d@outlook.com"],
         html=f"""
              <h2>Guten Tag</h2>
              <p> {args}</p>
+             <p><{text_1}/p>
              <p></p>
-             <p>   </p>
-             <p> </p>
+             <p>{text_2}</p>
              <p></p>
              <p>Datum:      {datum()}  </p>
              <p>Zeit:       {time()}  </p>

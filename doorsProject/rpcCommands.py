@@ -74,7 +74,6 @@ def activateReader_Ouput(readerId, outputNum):
             deviceId=readerId, outputNum=outputNum, action=1
         ),
     )
-    results = json.loads(response.text)["result"]
 
 
 def openDoor_short(deviceId, outputNum):
@@ -87,31 +86,29 @@ def openDoor_short(deviceId, outputNum):
             deviceId=deviceId, outputNum=outputNum, action=1
         ),
     )
-    results = json.loads(response.text)["result"]
-    print(results)
 
 
 def openOrClose_door(deviceId, outputNum):
     def relayToggle():
         # this function is only for relay 1 , u have to change the outputNum to make it flexible
+
+        openAction = 4
+        closeAction = 16
         action = None
         if (
             getInputsState(deviceId=deviceId) == 1
             or getInputsState(deviceId=deviceId) == 3
         ):
             # state 1 = relay1 is active /state 2 = relay2 is active / state 3 = relay1 and 2 are active
-            action = 16
-            openAction = 4
-            closeAction = 16
+            action = closeAction
+            print("the door will be closed! ")
         elif (
             getInputsState(deviceId=deviceId) == 0
             or getInputsState(deviceId=deviceId) == 2
         ):
-            action = 4
-        print(action)
+            action = openAction
+            print("the door will stay open ")
         return action
-
-    relayToggle()
 
     url = PayloadCollection.canneraldRpcServerUrl
     response = requests.get(

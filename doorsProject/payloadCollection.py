@@ -7,8 +7,6 @@ class PayloadCollection:
     password = os.environ.get("GLUTZ_BST_PASS")
     headers = {"Content-Type": "application/json"}
     GlutzUrl = "31.24.10.138"
-    # localWsServerPort = 8750
-    # localWsServerUrl = f"ws://localhost:{localWsServerPort}"
     canneraldRpcServerUrl = f"http://{username}:{password}@{GlutzUrl}:8332/rpc/"
     canneraldWsServerUrl = f"ws://{username}:{password}@{GlutzUrl}:8332"
     backupWsServerPort = 8800
@@ -21,7 +19,6 @@ class PayloadCollection:
     IO_Extender_Type = 80
     IO_ModuleRelay_1 = 2
     IO_ModuleRelay_2 = 4
-
     masterCodeActionProfileId = "1002"  # in Glutz Codes menu profile non Default
     message = {
         "method": "registerObserver",
