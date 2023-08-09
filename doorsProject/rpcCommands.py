@@ -101,13 +101,13 @@ def openOrClose_door(deviceId, outputNum):
         ):
             # state 1 = relay1 is active /state 2 = relay2 is active / state 3 = relay1 and 2 are active
             action = closeAction
-            print("the door will be closed! ")
+            print("🚪 the door will be closed! 👍")
         elif (
             getInputsState(deviceId=deviceId) == 0
             or getInputsState(deviceId=deviceId) == 2
         ):
             action = openAction
-            print("the door will stay open ")
+            print("🚪 the door will stay open 👍")
         return action
 
     url = PayloadCollection.canneraldRpcServerUrl

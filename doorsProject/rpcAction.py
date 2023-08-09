@@ -23,7 +23,7 @@ class RpcAction:
         door_label = get_doorLabel(
             accessPointId=get_accessPointIdByReaderId_info(deviceId=readerId)
         )
-        print(f"user: {user_label} have access to door: {door_label}")
+        print(f"user: {user_label} have access to door: {door_label} 👍")
 
         if activationModus == "keep_it_open/close_it":
             openOrClose_door(deviceId=IO_Module, outputNum=outputNum)
