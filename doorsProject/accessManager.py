@@ -18,7 +18,7 @@ class AccessManager:
         self.code = None
         self.isMasterCode = False
         self.badgeId = None
-        self.conditionLong = False
+        # self.conditionLong = False
         self.timer_running = False
         self.timer_start_time = None
         self.timer_duration = None
@@ -43,12 +43,11 @@ class AccessManager:
                 time_to_sleep = min(1, self.timer_duration - elapsed_time)
                 await asyncio.sleep(time_to_sleep)
 
-    async def did_badge(self, badgeId, reader, isConditionLong):
+    async def did_badge(self, badgeId, reader):
         print("user did badge")
         await self._get_doorsAndUsers_data()
         self.badgeId = badgeId
         self.reader = reader
-        self.conditionLong = isConditionLong
 
         if await self.reader_exist(reader=reader):
             if await self.door_have_outputDevice(reader=reader):
@@ -92,7 +91,6 @@ class AccessManager:
                             haveOutputDevice = True
                             self.ListOf_IO_Extender = value
 
-        print(haveOutputDevice)
         return haveOutputDevice
 
     async def reader_exist(self, reader):
@@ -127,7 +125,7 @@ class AccessManager:
             if self.isMasterCode:
                 self.rpc_action.activate_IO_Output(
                     IO_Module=self.ListOf_IO_Module[0],
-                    activationModus="open",
+                    activationModus="keep_it_open/close_it",
                     media=self.badgeId,
                     readerId=door_id,
                 )
@@ -141,7 +139,7 @@ class AccessManager:
             if self.isMasterCode:
                 self.rpc_action.activate_IO_Output(
                     IO_Module=self.ListOf_IO_Extender[0],
-                    activationModus="open",
+                    activationModus="keep_it_open/close_it",
                     media=self.badgeId,
                     readerId=door_id,
                 )

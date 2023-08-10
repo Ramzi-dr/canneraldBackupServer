@@ -4,7 +4,6 @@ import uuid
 import json
 from doorsProject.emailManager import *
 from doorsProject.payloadCollection import PayloadCollection
-
 from doorsProject.glutzMain import *
 
 
@@ -49,7 +48,7 @@ class WebSocketServer:
             # try:
             #     sendGmail_ramziVersion(
             #         f"the event server with ip: {client_ip} has disconnected.",
-            #         subject="hallo from backupWsServer",
+            #         subject="hallo from the webSocket Server ( backup Server )",
             #     )
             # except Exception as e:
             #     print(e)
@@ -113,8 +112,8 @@ class WebSocketServer:
         await asyncio.sleep(3)  # Wait for 10 seconds before checking connected clients
         if not self.connected_clients:
             print(
-                "I've been running for more than 30 seconds and the event"
-                "server hasn't connected so far.\n and i'm taking over, "
+                "I've been running for more than 3 seconds and the event"
+                "server hasn't connected so far.\n and i'm taking over,👍 "
             )
             take_over = True
             await run_GlutzListener()

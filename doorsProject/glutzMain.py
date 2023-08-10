@@ -12,6 +12,18 @@ from doorsProject.messageFilter import MessageFilter
 doors_instances = {}
 
 
+def sendMail_afterException(serverInfo, exeption):
+    try:
+        sendGmail_ramziVersion(
+            f"Hoi We don't have a connection. Please control the {serverInfo} Server.",
+            subject="hallo from the backup Server.",
+            text_1=f"Error: {exeption}",
+        )
+    except Exception as e:
+        print(e)
+        pass
+
+
 def delete_door_instance(door_id):
     global doors_instances
     thread_id = threading.current_thread().ident
@@ -60,13 +72,13 @@ take_over = True
 async def listen(url, serverInfo):
     counter = 0
     while take_over:
-        print("im running till the main server is back")
+        print("Hoi, im running till the main server is back")
         while counter < 500000 and take_over:
             try:
                 async with connect(url) as websocket:
                     await websocket.send(json.dumps(PayloadCollection.message))
                     print(
-                        "Hoi from the Backup Server I'm Connected to the  Glutz Server"
+                        "Hoi, from the Backup Server I'm Connected to the  Glutz Server"
                     )
                     counter = 0
 
@@ -95,11 +107,11 @@ async def listen(url, serverInfo):
                 await asyncio.sleep(1)
                 print(f"I am trying to reconnect for the {counter} time.")
                 counter += 1
-                # if counter == 5 or counter == 50 or counter == 150:
-                #     exceptionMessage = "ConnectionRefusedError"
-                #     sendMail_afterException(
-                #         serverInfo=serverInfo, exeption=exceptionMessage
-                #     )
+                if counter == 50 or counter == 500 or counter == 5000:
+                    exceptionMessage = "ConnectionRefusedError"
+                    sendMail_afterException(
+                        serverInfo=serverInfo, exeption=exceptionMessage
+                    )
 
             except (
                 websockets.exceptions.ConnectionClosedOK,
@@ -110,11 +122,11 @@ async def listen(url, serverInfo):
                 )
                 await asyncio.sleep(1)
                 print(f"I am trying to reconnect for the {counter} time.")
-                # if counter == 5 or counter == 50 or counter == 150:
-                #     exceptionMessage = "websockets.exceptions.ConnectionClosedOK-ConnectionClosedError,"
-                #     sendMail_afterException(
-                #         serverInfo=serverInfo, exeption=exceptionMessage
-                #     )
+                if counter == 50 or counter == 500 or counter == 5000:
+                    exceptionMessage = "websockets.exceptions.ConnectionClosedOK-ConnectionClosedError,"
+                    sendMail_afterException(
+                        serverInfo=serverInfo, exeption=exceptionMessage
+                    )
 
             except OSError:
                 await asyncio.sleep(1)
@@ -123,21 +135,22 @@ async def listen(url, serverInfo):
                     f"Server: {serverInfo} is down. There is no connection, and I will try to reconnect for the {counter} time."
                 )
                 counter += 1
-                if counter == 5 or counter == 50 or counter == 150:
+                if counter == 50 or counter == 500 or counter == 5000:
                     exceptionMessage = ("OSError,",)
 
                     sendMail_afterException(
                         serverInfo=serverInfo, exeption=exceptionMessage
                     )
-
+            except Exception as e:
+                sendMail_afterException(serverInfo=serverInfo, exeption=e)
             except asyncio.exceptions.TimeoutError:
                 await asyncio.sleep(1)
                 counter += 1
-                # if counter == 5 or counter == 50 or counter == 150:
-                #     exceptionMessage = "asyncio.exceptions.TimeoutError,"
-                #     sendMail_afterException(
-                #         serverInfo=serverInfo, exeption=exceptionMessage
-                #     )
+                if counter == 50 or counter == 500 or counter == 5000:
+                    exceptionMessage = "asyncio.exceptions.TimeoutError,"
+                    sendMail_afterException(
+                        serverInfo=serverInfo, exeption=exceptionMessage
+                    )
 
             except websockets.ConnectionClosed:
                 continue
@@ -146,25 +159,20 @@ async def listen(url, serverInfo):
 
 
 async def run_GlutzListener():
-    asyncio.create_task(
-        listen(
-            url=PayloadCollection.canneraldWsServerUrl,
-            serverInfo=PayloadCollection.GlutzUrl,
+    try:
+        asyncio.create_task(
+            listen(
+                url=PayloadCollection.canneraldWsServerUrl,
+                serverInfo=PayloadCollection.GlutzUrl,
+            )
         )
-    )
+    except KeyboardInterrupt:
+        print("Server shutting down...")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sendMail_afterException(exeption=f"General Error {e}")
 
 
 def take_overToggle(value):
     global take_over
     take_over = value
-
-
-def sendMail_afterException(serverInfo, exeption):
-    try:
-        sendGmail_ramziVersion(
-            f"Hoi We don't have a connection. Please control the {serverInfo} Server.\nError: {exeption}",
-            subject="hallo from backupWsServer event.",
-        )
-    except Exception as e:
-        print(e)
-        pass
